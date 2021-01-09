@@ -1,9 +1,10 @@
 import React from 'react';
+import Home from './components/home';
 
 export default class App extends React.Component {
     render () {
         return (
-            <h1>Hello from App! It works!</h1>
+            <Home />
         );
     }
 }
