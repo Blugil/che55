@@ -2,27 +2,24 @@ import React from 'react';
 import io from 'socket.io-client';
 import Game from './components/game.js';
 import Home from './components/home.js';
-import logo from './img/che55.png';
 import './app.scss';
 
 // Connect to server
 const socket = io.connect('http://localhost:4000/');
 
-const defaultState = {
-    isPlayingGame: false,
-    gameCode: "",
-    playerNo: 0,
-    errorCode: '',
-    gamePlayable: false,
-    playerTurn: false,
-    winner: '',
-};
-
 export default class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = defaultState;
+        this.state = {
+            isPlayingGame: false,
+            gameCode: "",
+            playerNo: 0,
+            errorCode: '',
+            gamePlayable: false,
+            playerTurn: false,
+            winner: '',
+        };
 
         this.newGame = this.newGame.bind(this);
         this.joinGame = this.joinGame.bind(this);
@@ -57,17 +54,16 @@ export default class App extends React.Component {
         
         //listens for winner event
         socket.on('winner', this.winner)
-
     }
 
     //sets playernumber and initial player turn
     playerJoin(player) {
-
+        console.log("Player joined");
         this.setState({
             playerNo: player,
             isPlayingGame: true,
         })
-        if (player === 1) {
+        if (player == 1) {
             this.setState({
                 playerTurn: true
             })
@@ -75,6 +71,7 @@ export default class App extends React.Component {
     }
 
     winner(winner) {
+        console.log("Winner determined");
         let winner_string;
         if (winner.toString() === this.state.playerNo.toString()) {
             winner_string = "You win!";
@@ -88,23 +85,33 @@ export default class App extends React.Component {
     }
 
     makeMove() {
+        console.log("Made move");
         socket.emit('playerMove', 'hello');
     }
 
     // Start a new game and generate a room code.
     newGame() {
+        console.log("Starting new game");
         socket.emit('newGame');
     }
 
     // Join an existing game.
     joinGame(code) {
+        console.log("Joining game");
         socket.emit('joinGame', code);
-        
     }
 
     // Quit current game.
     quitGame() {
-        this.setState(defaultState);
+        this.setState({
+            isPlayingGame: false,
+            gameCode: "",
+            playerNo: 0,
+            errorCode: '',
+            gamePlayable: false,
+            playerTurn: false,
+            winner: '',
+        });
         socket.emit('playerQuit');
     }
 
@@ -119,9 +126,7 @@ export default class App extends React.Component {
 
     render () {
         return (
-            <div>
-                {this.getCurrentPage()}
-            </div>
+            this.getCurrentPage()
         );
     }
 }
