@@ -9,7 +9,6 @@ const socket = io.connect('https://che55.herokuapp.com/', {
     withCredentials: true,
     extraHeaders: {
       "Access-Control-Allow-Origin" : "*"
-
     }
   });
 
