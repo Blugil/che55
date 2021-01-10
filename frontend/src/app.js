@@ -6,7 +6,7 @@ import Home from './components/home.js';
 
 // Connect to server CHANGE TO LOCALHOST FOR FUTURE
 const socket = io.connect('https://che55.herokuapp.com/', {
-    withCredentials: true,
+    // withCredentials: true,
   });
 
 export default class App extends React.Component {

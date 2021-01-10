@@ -9,7 +9,7 @@ const io = require("socket.io")(http, {
         //origin of request
         origin: "*",
         methods: ["GET", "POST"],
-        credentials: true,
+        // credentials: true,
     }
 });
 
