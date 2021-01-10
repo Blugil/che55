@@ -5,7 +5,7 @@ const http = require('http').createServer(app);
 const io = require("socket.io")(http, {
     cors: {
         //origin of request
-        origin: ["che55.online"],
+        origin: ["https://che55.online/"],
         methods: ["GET", "POST"]
     }
 });
