@@ -36,6 +36,7 @@ io.on('connection', (socket) => {
     socket.on('newGame', handleNewGame);
     socket.on('joinGame', handleJoin);
     socket.on('playerMove', hanldleMove);
+    socket.on('gameOver', handleGameOver);
 
     function handleNewGame() {
         
@@ -50,6 +51,10 @@ io.on('connection', (socket) => {
         socket.number = 1;
         socket.emit('players', 1);
 
+    }
+
+    function handleGameOver() {
+        //TODO
     }
 
     function handleJoin(roomCode) {
@@ -97,6 +102,7 @@ io.on('connection', (socket) => {
         }
         console.log(room, move);
         io.sockets.in(room).emit('playerMove', 'ping pong ding dong');
+        io.sockets.in(room).emit('')
     }
 })
 
