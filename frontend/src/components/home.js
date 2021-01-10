@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from "../img/che55.png";
 
 export default class Home extends React.Component {
 
@@ -24,11 +25,10 @@ export default class Home extends React.Component {
     render() {
         return (
             <div>
-                <div style={{ color: '#008B8B',
-                            textAlign: 'center', fontSize: '150%'}}>
-                    <h1>HOME</h1>
+                <div className="logo" id="home">
+                    <img src={logo} alt="che55" />
                 </div>
-                
+                <h1>Main Menu</h1>
                 <form onSubmit={this.handleSubmit}>
                     <div style={{ textAlign: 'center' }}>
                         <label>

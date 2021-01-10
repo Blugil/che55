@@ -1,6 +1,7 @@
 import Chessboard from "chessboardjsx";
 import React from 'react';
 import "../game.scss";
+import logo from "../img/che55.png";
 const Chess = require("chess.js");
 
 export default class Game extends React.Component {
@@ -85,23 +86,27 @@ export default class Game extends React.Component {
 
     render () {
         return (
-            <div className="flex-center" style={{ backgroundColor: '#FFFAF0', fontFamily: 'Arial, Helvetica, sans-serif' }}>
-                <div style={{ color: '#008B8B', textAlign: 'center', fontSize: '150%'}}>
-                    <h1>GAME</h1>
+            <div className="flex-center">
+                <div className="logo" id="game">
+                    <img src={logo} alt="che55" />
                 </div>
-                <h3>Game code: {this.props.state.gameCode}</h3>
-                <button onClick={this.props.quitGame}>
-                    <p>Quit game</p>
-                </button>
-                <br></br>
-                    <div style={{ color: '#20B2AA' }}>{this.props.state.winner}</div>
-                <br></br>
 
-                <Chessboard
-                    orientation={this.props.state.playerNo == 2 ? 'black' : 'white'}
-                    position={this.state.fen}
-                    onDrop={this.onDrop}
-                />
+                <div className="playArea">
+                    <Chessboard
+                        orientation={this.props.state.playerNo == 2 ? 'black' : 'white'}
+                        position={this.state.fen}
+                        onDrop={this.onDrop}
+                    />
+                </div>
+                <div className="controls">
+                    <h3>Game code: {this.props.state.gameCode}</h3>
+                    <button onClick={this.props.quitGame}>
+                        <p>Quit game</p>
+                    </button>
+                    <br></br>
+                        <div style={{ color: '#20B2AA' }}>{this.props.state.winner}</div>
+                    <br></br>
+                </div>
             </div>
         );
     }

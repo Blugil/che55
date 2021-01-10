@@ -1,0 +1,50 @@
+body {
+  background-color: #FFFAF0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  color: #008B8B;
+  text-align: center;
+  font-size: 250%;
+}
+
+Chessboard {
+  align: center;
+  width: 100%;
+}
+
+.board {
+  margin-left: 25%;
+  width: 50%;
+}
+
+// Logo
+img {
+  width: 100%;
+  image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
+  image-rendering: -moz-crisp-edges;          /* Firefox                        */
+  image-rendering: -o-crisp-edges;            /* Opera                          */
+  image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+  image-rendering: pixelated; /* Chrome */      /* CSS3 Proposed                  */
+  -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
+}
+#home.logo {
+  display: block;
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5%;
+  width: 30%;
+}
+#game.logo {
+  width: 10%;
+}
+
+// Game page
+.playArea {
+  display: block;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}

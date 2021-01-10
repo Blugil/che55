@@ -2,6 +2,8 @@ import React from 'react';
 import io from 'socket.io-client';
 import Game from './components/game.js';
 import Home from './components/home.js';
+import logo from './img/che55.png';
+import './app.scss';
 
 // Connect to server
 const socket = io.connect('http://localhost:4000/');
@@ -65,7 +67,7 @@ export default class App extends React.Component {
             playerNo: player,
             isPlayingGame: true,
         })
-        if (player == 1) {
+        if (player === 1) {
             this.setState({
                 playerTurn: true
             })
@@ -102,9 +104,7 @@ export default class App extends React.Component {
 
     // Quit current game.
     quitGame() {
-        this.setState({
-            isPlayingGame: false
-        })
+        this.setState(defaultState);
         socket.emit('playerQuit');
     }
 
@@ -119,10 +119,7 @@ export default class App extends React.Component {
 
     render () {
         return (
-            <div style={{ backgroundColor: '#FFFAF0', fontFamily: 'Arial, Helvetica, sans-serif' }}>
-                <header>
-                    <h1>che55</h1>
-                </header>
+            <div>
                 {this.getCurrentPage()}
             </div>
         );
