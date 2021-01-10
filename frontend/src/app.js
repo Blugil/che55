@@ -8,7 +8,8 @@ import Home from './components/home.js';
 const socket = io.connect('https://che55.herokuapp.com/', {
     withCredentials: true,
     extraHeaders: {
-      "Access-Control-Allow-Origin" : "https://che55.herokuapp.com/"
+      "Access-Control-Allow-Origin" : "*"
+
     }
   });
 
