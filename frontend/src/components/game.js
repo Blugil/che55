@@ -84,6 +84,7 @@ export default class Game extends React.Component {
         }
     }
 
+    // TODO: Erase winner text after quitting game
     render () {
         return (
             <div className="flex-center">

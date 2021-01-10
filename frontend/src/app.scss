@@ -9,14 +9,13 @@ h1 {
   font-size: 250%;
 }
 
+button {
+  margin-bottom: 10px;
+}
+
 Chessboard {
   align: center;
   width: 100%;
-}
-
-.board {
-  margin-left: 25%;
-  width: 50%;
 }
 
 // Logo
@@ -44,7 +43,12 @@ img {
 // Game page
 .playArea {
   display: block;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 25%;
+  margin-right: 5%;
+  float: left;
+}
+.controls {
+  background-color: #eee5d0;
+  float: left;
+  padding: 20px;
 }
