@@ -89,6 +89,8 @@ io.on('connection', (socket) => {
         socket.join(roomCode);
         socket.number = 2;
         socket.emit('players', '2');
+        socket.emit('gamecode', roomCode);
+        io.sockets.in(roomCode).emit('gamePlayable', true);
         console.log('success');
     }
 
@@ -101,8 +103,8 @@ io.on('connection', (socket) => {
             return;
         }
         //emits that a player has moved and emits to toggle player moves
-        io.sockets.in(room).emit('playerMove', 'ping pong ding dong');
-        io.sockets.in(room).emit('')
+        io.sockets.in(room).emit('playerMove', move);
+        io.sockets.in(room).emit('toggleTurn')
     }
 })
 

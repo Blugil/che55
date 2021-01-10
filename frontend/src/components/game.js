@@ -17,12 +17,18 @@ export default class Game extends React.Component {
         };
 
         this.onDrop = this.onDrop.bind(this);
+        this.makeMove = this.makeMove.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.socket.on("playerMove", this.makeMove);
+        console.log("Test")
     }
 
     // Receive a move from the server
     makeMove = (receivedMove) => {
-        this.state.game.move(receivedMove);
-
+        let move = this.state.game.move(receivedMove);
+        console.log(move);
         // Update game state
         this.setState(({ history, pieceSquare }) => ({
             fen: this.state.game.fen(),
@@ -32,23 +38,29 @@ export default class Game extends React.Component {
 
     // React to a player move
     onDrop = ({ sourceSquare, targetSquare}) => {
-        let move = this.state.game.move({
-            from: sourceSquare,
-            to: targetSquare,
-            promotion: "q"
-        });
+        if (this.props.state.gamePlayable && this.props.state.playerTurn) {
+            let move = this.state.game.move({
+                from: sourceSquare,
+                to: targetSquare,
+                promotion: "q"
+            });
 
-        // Illegal move
-        if (move === null) return;
+            // Illegal move
+            if (move === null) return;
 
-        // Update game state
-        this.setState(({ history, pieceSquare }) => ({
-            fen: this.state.game.fen(),
-            history: this.state.game.history({ verbose: true })
-        }));
-
-        // Use socket to send move
-        this.props.socket.emit("playerMove", this.state.fen);
+            // Update game state
+            this.setState(({ history, pieceSquare }) => ({
+                fen: this.state.game.fen(),
+                history: this.state.game.history({ verbose: true })
+            }));
+            
+            console.log(move);
+            // Use socket to send move
+            this.props.socket.emit("playerMove", move);
+        }
+        else {
+            return;
+        }
     }
 
     render () {
@@ -60,6 +72,7 @@ export default class Game extends React.Component {
                     <p>Quit game</p>
                 </button>
                 <Chessboard
+                    orientation={this.props.state.playerNo == 2 ? 'black' : 'white'}
                     position={this.state.fen}
                     onDrop={this.onDrop}
                 />
