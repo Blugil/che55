@@ -1,5 +1,5 @@
 //generates invite codes
-function generateID(length) {
+module.exports = function(length) {
 
     let result = '';
     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -8,8 +8,4 @@ function generateID(length) {
         result+=characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
-}
-
-module.exports = {
-    generateID,
 }

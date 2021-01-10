@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
 
 export default class Home extends React.Component {
 
@@ -32,6 +31,7 @@ export default class Home extends React.Component {
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         <p>Room code:</p>
+                        <p>{this.props.errorCode}</p>
                         <input type="text" value={this.state.value} onChange={this.handleChange} />
                     </label>
                     <input type="submit" value="Join" />

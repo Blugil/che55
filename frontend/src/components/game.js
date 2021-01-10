@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import "../game.scss";
 import Chessboard from "chessboardjsx";
-import { ChessInstance } from "chess.js";
+import React from 'react';
+import "../game.scss";
 const Chess = require("chess.js");
 
 export default class Game extends React.Component {
@@ -14,32 +13,26 @@ export default class Game extends React.Component {
             dropSquareStyle: {},
             pieceSquare: "",
             square: "",
-            history: []
+            history: [],
+            gameOver: ""
         };
 
         this.onDrop = this.onDrop.bind(this);
+        this.makeMove = this.makeMove.bind(this);
+    }
+
+    componentDidMount() {
+        //starts a listener on component mount that listens for moves 
+        this.props.socket.on("playerMove", this.makeMove);
     }
 
     // Receive a move from the server
     makeMove = (receivedMove) => {
-        this.state.game.move(receivedMove);
 
-        // Update game state
-        this.setState(({ history, pieceSquare }) => ({
-            fen: this.state.game.fen(),
-            history: this.state.game.history({ verbose: true })
-        }));
-    }
 
-    // React to a player move
-    onDrop = ({ sourceSquare, targetSquare}) => {
-        let move = this.state.game.move({
-            from: sourceSquare,
-            to: targetSquare,
-            promotion: "q"
-        });
+        let move = this.state.game.move(receivedMove);
 
-        // Illegal move
+        //double checks for valid move (even though its already checked)
         if (move === null) return;
 
         // Update game state
@@ -47,19 +40,59 @@ export default class Game extends React.Component {
             fen: this.state.game.fen(),
             history: this.state.game.history({ verbose: true })
         }));
+        //checks after move if game is over
+        if (this.state.game.game_over()) {
 
-        // Use socket to send move
-        this.props.socket.emit("playerMove", this.state.fen);
+            let game_over_string = "Player " + this.props.state.playerNo + " wins!!"
+            this.setState({
+                gameOver: game_over_string
+            })
+        }
+    }
+
+    // React to a player move
+    onDrop = ({ sourceSquare, targetSquare}) => {
+        //checks if both player move and both players connected
+        if (this.props.state.gamePlayable && this.props.state.playerTurn) {
+            let move = this.state.game.move({
+                from: sourceSquare,
+                to: targetSquare,
+                promotion: "q"
+            });
+
+            // Illegal move
+            if (move === null) return;
+
+            // Update game state
+            this.setState(({ history, pieceSquare }) => ({
+                fen: this.state.game.fen(),
+                history: this.state.game.history({ verbose: true })
+            }));
+            
+            // Use socket to send move
+            this.props.socket.emit("playerMove", move);
+            
+            //checks after move if game is over
+            if (this.state.game.game_over()) {
+                this.props.socket.emit('gameOver', this.props.state.playerNo);
+            }
+        }
+        else {
+            return;
+        }
     }
 
     render () {
         return (
             <div className="flex-center">
                 <h1>game.js</h1>
+                <h3>Game code: {this.props.state.gameCode}</h3>
                 <button onClick={this.props.quitGame}>
                     <p>Quit game</p>
                 </button>
+                <div>{this.props.state.winner}</div>
                 <Chessboard
+                    orientation={this.props.state.playerNo == 2 ? 'black' : 'white'}
                     position={this.state.fen}
                     onDrop={this.onDrop}
                 />
