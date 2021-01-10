@@ -31,12 +31,15 @@ function generateID(length) {
 io.on('connection', (socket) => {
     console.log("User connected");
     
-    // this is where we can add custom emiters and events (and the data they will send and recieve)
-    
+    // this is where we can add custom and events (and the data they will send and recieve)
     socket.on('newGame', handleNewGame);
     socket.on('joinGame', handleJoin);
     socket.on('playerMove', hanldleMove);
     socket.on('gameOver', handleGameOver);
+
+    socket.on('disconnect', () => {
+        console.log(socket.id + " has disconnected");
+    })
 
     function handleNewGame() {
         
@@ -60,12 +63,7 @@ io.on('connection', (socket) => {
     function handleJoin(roomCode) {
         //looks for the room with the specified roomCode
         const room = Object.fromEntries(io.sockets.adapter.rooms);
-        //ges all the sockes in he room
-        // let users;
-        // if (room) {
-        //     users = room.sockets;
-        //     console.log(users);
-        // }
+
         //sets the total number of clients
         let clients = 0;
         if (room) {
@@ -95,16 +93,19 @@ io.on('connection', (socket) => {
     }
 
     function hanldleMove(move) {
+
+        //gets he room based on the socket.id
         const room = clientRooms[socket.id];
 
         if (!room) {
             return;
         }
-        console.log(room, move);
+        //emits that a player has moved and emits to toggle player moves
         io.sockets.in(room).emit('playerMove', 'ping pong ding dong');
         io.sockets.in(room).emit('')
     }
 })
+
 
 //listening on the server
 http.listen(4000, () => {
