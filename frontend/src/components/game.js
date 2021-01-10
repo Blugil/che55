@@ -6,8 +6,36 @@ const Chess = require("chess.js");
 
 export default class Game extends React.Component {
 
-    chess() {
-        new Chess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+    constructor(props) {
+        super(props);
+        this.state = {
+            game: new Chess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+            fen: "start",
+            dropSquareStyle: {},
+            pieceSquare: "",
+            square: "",
+            history: []
+        };
+
+        this.onDrop = this.onDrop.bind(this);
+    }
+
+    // React to a player move
+    onDrop = ({ sourceSquare, targetSquare}) => {
+        let move = this.state.game.move({
+            from: sourceSquare,
+            to: targetSquare,
+            promotion: "q"
+        });
+
+        // Illegal move
+        if (move === null) return;
+
+        // Update game state
+        this.setState(({ history, pieceSquare }) => ({
+            fen: this.state.game.fen(),
+            history: this.state.game.history({ verbose: true })
+        }));
     }
 
     render () {
@@ -18,7 +46,8 @@ export default class Game extends React.Component {
                     <p>Quit game</p>
                 </button>
                 <Chessboard
-                    position="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+                    position={this.state.fen}
+                    onDrop={this.onDrop}
                 />
             </div>
         );

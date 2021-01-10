@@ -1,6 +1,7 @@
 import React from 'react';
 import Home from './components/home.js';
 import Game from './components/game.js';
+import socket from 'socket.io';
 import Login from './components/login.js';
 import Logout from './components/logout.js';
 const utils = require('./utils.js');
@@ -11,7 +12,8 @@ export default class App extends React.Component {
         super(props);
         this.state = {
             isPlayingGame: false,
-            gameCode: ""
+            gameCode: "",
+            playerNo: 0
         };
 
         this.newGame = this.newGame.bind(this);
@@ -21,21 +23,19 @@ export default class App extends React.Component {
 
     // Start a new game and generate a room code.
     newGame() {
-        var newCode = utils.generateID(6);
+        socket.emit('newGame');
         this.setState({
-            isPlayingGame: true,
-            gameCode: newCode
+            isPlayingGame: true
         })
-        console.log("Started game with code " + newCode);
     }
 
     // Join an existing game.
     joinGame(code) {
+        socket.emit('joinGame', code);
         this.setState({
             isPlayingGame: true,
             gameCode: code
         })
-        console.log("Joined game with code " + code);
     }
 
     // Quit current game.
