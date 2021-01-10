@@ -1,14 +1,17 @@
 const generateID = require('./generate_id');
 const app = require('express')();
+const cors = require('cors');
 const http = require('http').createServer(app);
-// manages cors requests
+// manages cors requestsi
+app.use(cors())
 const io = require("socket.io")(http, {
     cors: {
         //origin of request
         origin: ["https://che55.online/", "https://nostalgic-keller-1abde6.netlify.app", "http://localhost:3000"],
         methods: ["GET", "POST"],
         allowedHeaders: ["Access-Control-Allow-Origin"],
-        credentials: true
+        credentials: true,
+        exposedHeaders: []
     }
 });
 
