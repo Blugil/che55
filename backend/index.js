@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
 
         socket.join(room);
         socket.number = 1;
-        socket.emit('players', 1);
+        socket.emit('players', '1');
 
     }
 
@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
 
         //sets the total number of clients
         let clients = 0;
-        if (room) {
+        if (room && room[roomCode]) {
             clients = room[roomCode].size;
         }
 
@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
 
         socket.join(roomCode);
         socket.number = 2;
-        socket.emit('players', 2);
+        socket.emit('players', '2');
         console.log('success');
     }
 

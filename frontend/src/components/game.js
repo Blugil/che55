@@ -55,7 +55,7 @@ export default class Game extends React.Component {
         return (
             <div className="flex-center">
                 <h1>game.js</h1>
-                <h3>Game code: {this.props.gameCode}</h3>
+                <h3>Game code: {this.props.state.gameCode}</h3>
                 <button onClick={this.props.quitGame}>
                     <p>Quit game</p>
                 </button>
