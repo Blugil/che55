@@ -94,7 +94,7 @@ export default class Game extends React.Component {
                     <p>Quit game</p>
                 </button>
                 <br></br>
-                <div style={{ color: '#20B2AA' }}>{this.props.state.winner}</div>
+                    <div style={{ color: '#20B2AA' }}>{this.props.state.winner}</div>
                 <br></br>
 
                 <Chessboard

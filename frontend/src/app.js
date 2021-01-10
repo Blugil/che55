@@ -6,20 +6,21 @@ import Home from './components/home.js';
 // Connect to server
 const socket = io.connect('http://localhost:4000/');
 
+const defaultState = {
+    isPlayingGame: false,
+    gameCode: "",
+    playerNo: 0,
+    errorCode: '',
+    gamePlayable: false,
+    playerTurn: false,
+    winner: '',
+};
+
 export default class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            isPlayingGame: false,
-            gameCode: "",
-            playerNo: 0,
-            errorCode: '',
-            gamePlayable: false,
-            playerTurn: false,
-            winner: '',
-        };
-        
+        this.state = defaultState;
 
         this.newGame = this.newGame.bind(this);
         this.joinGame = this.joinGame.bind(this);
@@ -72,7 +73,12 @@ export default class App extends React.Component {
     }
 
     winner(winner) {
-        let winner_string = "Player " + winner + " wins!!"
+        let winner_string;
+        if (winner.toString() === this.state.playerNo.toString()) {
+            winner_string = "You win!";
+        } else {
+            winner_string = "You lose!";
+        }
         this.setState({
             gamePlayable: false,
             winner: winner_string
