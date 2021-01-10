@@ -36,17 +36,42 @@ io.on('connection', (socket) => {
     socket.on('joinGame', handleJoin);
     socket.on('playerMove', hanldleMove);
     socket.on('gameOver', handleGameOver);
+    socket.on('playerQuit', handlePlayerQuit);
+    socket.on('disconnect', handlePlayerQuit);
 
-    socket.on('disconnect', () => {
-        console.log(socket.id + " has disconnected");
-    })
+    function cleanLobby() {
+        //removes client from clientRooms (does not let new player connect)
+        delete clientRooms[socket.id];
+        console.log(clientRooms);
+    }
+
+    function disqualifyPlayer() {
+
+        let room = clientRooms[socket.id];
+        let winner; 
+
+        if (!room) {
+            return;
+        }
+
+        if (socket.number == 1) {
+            winner = 2;
+        }
+        else {
+            winner = 1;
+        }
+
+        io.sockets.in(room).emit('winner', winner);
+
+        cleanLobby(room);
+            
+    }
 
     function handleNewGame() {
         
         //generates new room and joins it
         let room = generateID(5);
         clientRooms[socket.id] = room;
-        console.log(clientRooms);
         //lets the frontend see the unique gamecode
         socket.emit('gamecode', room);
 
@@ -56,8 +81,21 @@ io.on('connection', (socket) => {
 
     }
 
-    function handleGameOver() {
-        //TODO
+    //sends the winning player to all players in lobby
+    function handleGameOver(winner) {
+        
+        const room = clientRooms[socket.id];
+
+        if (!room) {
+            return;
+        }
+
+        io.sockets.in(room).emit('winner', winner);
+        console.log(winner);
+    }
+
+    function handlePlayerQuit() {
+        disqualifyPlayer();
     }
 
     function handleJoin(roomCode) {

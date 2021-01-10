@@ -13,7 +13,8 @@ export default class Game extends React.Component {
             dropSquareStyle: {},
             pieceSquare: "",
             square: "",
-            history: []
+            history: [],
+            gameOver: ""
         };
 
         this.onDrop = this.onDrop.bind(this);
@@ -21,23 +22,37 @@ export default class Game extends React.Component {
     }
 
     componentDidMount() {
+        //starts a listener on component mount that listens for moves 
         this.props.socket.on("playerMove", this.makeMove);
-        console.log("Test")
     }
 
     // Receive a move from the server
     makeMove = (receivedMove) => {
+
+
         let move = this.state.game.move(receivedMove);
-        console.log(move);
+
+        //double checks for valid move (even though its already checked)
+        if (move === null) return;
+
         // Update game state
         this.setState(({ history, pieceSquare }) => ({
             fen: this.state.game.fen(),
             history: this.state.game.history({ verbose: true })
         }));
+        //checks after move if game is over
+        if (this.state.game.game_over()) {
+
+            let game_over_string = "Player " + this.props.state.playerNo + " wins!!"
+            this.setState({
+                gameOver: game_over_string
+            })
+        }
     }
 
     // React to a player move
     onDrop = ({ sourceSquare, targetSquare}) => {
+        //checks if both player move and both players connected
         if (this.props.state.gamePlayable && this.props.state.playerTurn) {
             let move = this.state.game.move({
                 from: sourceSquare,
@@ -54,9 +69,13 @@ export default class Game extends React.Component {
                 history: this.state.game.history({ verbose: true })
             }));
             
-            console.log(move);
             // Use socket to send move
             this.props.socket.emit("playerMove", move);
+            
+            //checks after move if game is over
+            if (this.state.game.game_over()) {
+                this.props.socket.emit('gameOver', this.props.state.playerNo);
+            }
         }
         else {
             return;
@@ -71,6 +90,7 @@ export default class Game extends React.Component {
                 <button onClick={this.props.quitGame}>
                     <p>Quit game</p>
                 </button>
+                <div>{this.props.state.winner}</div>
                 <Chessboard
                     orientation={this.props.state.playerNo == 2 ? 'black' : 'white'}
                     position={this.state.fen}
