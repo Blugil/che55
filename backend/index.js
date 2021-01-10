@@ -133,8 +133,8 @@ io.on('connection', (socket) => {
     }
 })
 
-
+let port = process.env.PORT || 4000;
 //listening on the server
-http.listen(4000, () => {
-    console.log("Running on port 4000");
+http.listen(port, () => {
+    console.log(`Running on port ${port}`);
 })
