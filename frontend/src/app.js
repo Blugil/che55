@@ -24,51 +24,41 @@ export default class App extends React.Component {
         this.newGame = this.newGame.bind(this);
         this.joinGame = this.joinGame.bind(this);
         this.quitGame = this.quitGame.bind(this);
-        this.player = this.player.bind(this);
+        this.playerJoin = this.playerJoin.bind(this);
+        this.winner = this.winner.bind(this);
     }
 
     // initialize listeners here instead of constructor
     componentDidMount() {
 
-        // TODO: clean up, probably put the callback functions in their own separate functions since this is one cluttered constructor
         // Set up listeners
         socket.on("gamecode", (code) => {
             this.setState({gameCode: code })
         });
+
         //listens for event that lobby is full/invite link is wrong
         socket.on("code", (code) => {
-            this.setState({
-                errorCode: code
-            })
+            this.setState({errorCode: code})
         })
 
         socket.on("gamePlayable", (bool) => {
-            this.setState({
-                gamePlayable: bool
-            })
-            console.log(this.state.gamePlayable);
+            this.setState({gamePlayable: bool})
         })
         //players event confirms game join, attaches player number to client state
-        socket.on('players', this.player)
+        socket.on('players', this.playerJoin)
 
         //toggles between white and black turn by inverted turn bool
         socket.on('toggleTurn', () => {
-            this.setState({
-                playerTurn: !this.state.playerTurn
-            })
-            console.log(this.state.playerTurn)
+            this.setState({playerTurn: !this.state.playerTurn})
         })
+        
+        //listens for winner event
+        socket.on('winner', this.winner)
 
-        socket.on('winner', (winner) => {
-            let winner_string = "Player " + winner + " wins!!"
-            this.setState({
-                gamePlayable: false,
-                winner: winner_string
-            })
-        })
     }
 
-    player(player) {
+    //sets playernumber and initial player turn
+    playerJoin(player) {
 
         this.setState({
             playerNo: player,
@@ -79,7 +69,14 @@ export default class App extends React.Component {
                 playerTurn: true
             })
         }
-        console.log(player);
+    }
+
+    winner(winner) {
+        let winner_string = "Player " + winner + " wins!!"
+        this.setState({
+            gamePlayable: false,
+            winner: winner_string
+        })
     }
 
     makeMove() {
@@ -110,7 +107,7 @@ export default class App extends React.Component {
         if (this.state.isPlayingGame) {
             return <Game state={this.state} makeMove={this.makeMove} quitGame={this.quitGame} socket={socket} />;
         } else {
-            return <Home onNewGame={this.newGame} onJoinGame={this.joinGame} />;
+            return <Home errorCode={this.state.errorCode} onNewGame={this.newGame} onJoinGame={this.joinGame} />;
         }
     }
 
