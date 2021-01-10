@@ -1,10 +1,11 @@
 import React from 'react';
 import Home from './components/home.js';
 import Game from './components/game.js';
+import io from 'socket.io-client';
+
 const utils = require('./utils.js');
 
 // Connect to server
-import io from 'socket.io-client';
 const socket = io.connect('http://localhost:4000/');
 
 export default class App extends React.Component {
@@ -22,7 +23,7 @@ export default class App extends React.Component {
             this.setState({gameCode: code })
         });
         socket.on("playerMove", (move) => {
-
+            // TODO: Call game.js with new player move
         });
 
         this.newGame = this.newGame.bind(this);

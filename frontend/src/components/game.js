@@ -32,6 +32,7 @@ export default class Game extends React.Component {
     }
 
     // React to a player move
+    // TODO: Prevent player from moving off-turn
     onDrop = ({ sourceSquare, targetSquare}) => {
         let move = this.state.game.move({
             from: sourceSquare,
