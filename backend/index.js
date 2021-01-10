@@ -6,7 +6,9 @@ const io = require("socket.io")(http, {
     cors: {
         //origin of request
         origin: ["https://che55.online/", "https://nostalgic-keller-1abde6.netlify.app", "http://localhost:3000"],
-        methods: ["GET", "POST"]
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Access-Control-Allow-Origin"],
+        credentials: true
     }
 });
 
