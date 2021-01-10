@@ -1,10 +1,10 @@
 import React from 'react';
-import Home from './components/home.js';
+import io from 'socket.io-client';
 import Game from './components/game.js';
+import Home from './components/home.js';
 const utils = require('./utils.js');
 
 // Connect to server
-import io from 'socket.io-client';
 const socket = io.connect('http://localhost:4000/');
 
 export default class App extends React.Component {
@@ -62,7 +62,7 @@ export default class App extends React.Component {
     // Get either the homepage or gamepage, depending on state
     getCurrentPage() {
         if (this.state.isPlayingGame) {
-            return <Game quitGame={this.quitGame} socket={socket} />;
+            return <Game gameCode={this.state.gameCode} quitGame={this.quitGame} socket={socket} />;
         } else {
             return <Home onNewGame={this.newGame} onJoinGame={this.joinGame} />;
         }

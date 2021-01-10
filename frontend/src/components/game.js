@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import "../game.scss";
 import Chessboard from "chessboardjsx";
-import { ChessInstance } from "chess.js";
+import React from 'react';
+import "../game.scss";
 const Chess = require("chess.js");
 
 export default class Game extends React.Component {
@@ -56,6 +55,7 @@ export default class Game extends React.Component {
         return (
             <div className="flex-center">
                 <h1>game.js</h1>
+                <h3>Game code: {this.props.gameCode}</h3>
                 <button onClick={this.props.quitGame}>
                     <p>Quit game</p>
                 </button>
