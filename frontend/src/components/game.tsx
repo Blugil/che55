@@ -3,7 +3,7 @@ import Chessboard from "chessboardjsx";
 import { ChessInstance, ShortMove } from "chess.js";
 const Chess = require("chess.js");
 
-const Home : React.FC = () => {
+const Game : React.FC = () => {
 
     // Create a chess.js object to generate legal moves
     const [chess] = useState<ChessInstance>(
@@ -33,19 +33,20 @@ const Home : React.FC = () => {
     return (
         <div>
             <h1>home.tsx</h1>
-            <Chessboard
-                width={400}
-                position={fen}
-                onDrop={(move) =>
-                    handleMove({
-                        from: move.sourceSquare,
-                        to: move.targetSquare,
-                        promotion: "q",
-                    })
-                }
-            />
+            <div className="board">
+                <Chessboard
+                    position={fen}
+                    onDrop={(move) =>
+                        handleMove({
+                            from: move.sourceSquare,
+                            to: move.targetSquare,
+                            promotion: "q",
+                        })
+                    }
+                />
+            </div>
         </div>
     );
 }
 
-export default Home;
+export default Game;

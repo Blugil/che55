@@ -1,10 +1,19 @@
 import React from 'react';
-import Home from './components/home.tsx';
+import Home from './components/home.js';
+import Game from './components/game.tsx';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 export default class App extends React.Component {
     render () {
         return (
-            <Home />
+            <Router>
+                <Route exact path="/">
+                    <Home />
+                </Route>
+                <Route exact path="/game">
+                    <Game />
+                </Route>
+            </Router>
         );
     }
 }
