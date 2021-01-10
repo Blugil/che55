@@ -2,6 +2,7 @@ import React from 'react';
 import io from 'socket.io-client';
 import Game from './components/game.js';
 import Home from './components/home.js';
+import './app.scss';
 
 // Connect to server
 const socket = io.connect('http://localhost:4000/');
@@ -19,7 +20,6 @@ export default class App extends React.Component {
             playerTurn: false,
             winner: '',
         };
-        
 
         this.newGame = this.newGame.bind(this);
         this.joinGame = this.joinGame.bind(this);
@@ -54,12 +54,11 @@ export default class App extends React.Component {
         
         //listens for winner event
         socket.on('winner', this.winner)
-
     }
 
     //sets playernumber and initial player turn
     playerJoin(player) {
-
+        console.log("Player joined");
         this.setState({
             playerNo: player,
             isPlayingGame: true,
@@ -72,7 +71,13 @@ export default class App extends React.Component {
     }
 
     winner(winner) {
-        let winner_string = "Player " + winner + " wins!!"
+        console.log("Winner determined");
+        let winner_string;
+        if (winner.toString() === this.state.playerNo.toString()) {
+            winner_string = "You win!";
+        } else {
+            winner_string = "You lose!";
+        }
         this.setState({
             gamePlayable: false,
             winner: winner_string
@@ -80,25 +85,33 @@ export default class App extends React.Component {
     }
 
     makeMove() {
+        console.log("Made move");
         socket.emit('playerMove', 'hello');
     }
 
     // Start a new game and generate a room code.
     newGame() {
+        console.log("Starting new game");
         socket.emit('newGame');
     }
 
     // Join an existing game.
     joinGame(code) {
+        console.log("Joining game");
         socket.emit('joinGame', code);
-        
     }
 
     // Quit current game.
     quitGame() {
         this.setState({
-            isPlayingGame: false
-        })
+            isPlayingGame: false,
+            gameCode: "",
+            playerNo: 0,
+            errorCode: '',
+            gamePlayable: false,
+            playerTurn: false,
+            winner: '',
+        });
         socket.emit('playerQuit');
     }
 
@@ -113,12 +126,7 @@ export default class App extends React.Component {
 
     render () {
         return (
-            <div>
-                <header>
-                    <h1>che55</h1>
-                </header>
-                {this.getCurrentPage()}
-            </div>
+            this.getCurrentPage()
         );
     }
 }

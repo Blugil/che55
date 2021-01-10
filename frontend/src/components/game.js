@@ -1,6 +1,7 @@
 import Chessboard from "chessboardjsx";
 import React from 'react';
 import "../game.scss";
+import logo from "../img/che55.png";
 const Chess = require("chess.js");
 
 export default class Game extends React.Component {
@@ -28,8 +29,6 @@ export default class Game extends React.Component {
 
     // Receive a move from the server
     makeMove = (receivedMove) => {
-
-
         let move = this.state.game.move(receivedMove);
 
         //double checks for valid move (even though its already checked)
@@ -40,29 +39,24 @@ export default class Game extends React.Component {
             fen: this.state.game.fen(),
             history: this.state.game.history({ verbose: true })
         }));
-        //checks after move if game is over
-        if (this.state.game.game_over()) {
-
-            let game_over_string = "Player " + this.props.state.playerNo + " wins!!"
-            this.setState({
-                gameOver: game_over_string
-            })
-        }
     }
 
     // React to a player move
-    // TODO: Prevent player from moving off-turn
     onDrop = ({ sourceSquare, targetSquare}) => {
         //checks if both player move and both players connected
+
+        console.log("MOVE DETECTED");
         if (this.props.state.gamePlayable && this.props.state.playerTurn) {
             let move = this.state.game.move({
                 from: sourceSquare,
                 to: targetSquare,
                 promotion: "q"
             });
+            console.log("MOVE ALLOWED");
 
             // Illegal move
             if (move === null) return;
+            console.log("MOVE IS NULL");
 
             // Update game state
             this.setState(({ history, pieceSquare }) => ({
@@ -83,20 +77,29 @@ export default class Game extends React.Component {
         }
     }
 
+    // TODO: Erase winner text after quitting game
     render () {
         return (
             <div className="flex-center">
-                <h1>game.js</h1>
-                <h3>Game code: {this.props.state.gameCode}</h3>
-                <button onClick={this.props.quitGame}>
-                    <p>Quit game</p>
-                </button>
-                <div>{this.props.state.winner}</div>
-                <Chessboard
-                    orientation={this.props.state.playerNo == 2 ? 'black' : 'white'}
-                    position={this.state.fen}
-                    onDrop={this.onDrop}
-                />
+                <div className="controls">
+                    <div className="logo" id="game">
+                        <img src={logo} alt="che55" />
+                    </div>
+                    <h3>Game code: {this.props.state.gameCode}</h3>
+                    <button onClick={this.props.quitGame}>
+                        <p>Quit game</p>
+                    </button>
+                    <br></br>
+                    <div style={{ color: '#20B2AA' }}>{this.props.state.winner}</div>
+                    <br></br>
+                </div>
+                <div className="playArea">
+                    <Chessboard
+                        orientation={this.props.state.playerNo.toString() === "2" ? 'black' : 'white'}
+                        position={this.state.fen}
+                        onDrop={this.onDrop}
+                    />
+                </div>
             </div>
         );
     }
