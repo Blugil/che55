@@ -1,5 +1,5 @@
 # che55.online
-![Alt text](che55 3x2.png?raw=true "Title")
+![che55](che55_3x2.png?raw=true "Title")
 
 ## Our Motivation
 
