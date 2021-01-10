@@ -51,6 +51,7 @@ export default class Game extends React.Component {
     }
 
     // React to a player move
+    // TODO: Prevent player from moving off-turn
     onDrop = ({ sourceSquare, targetSquare}) => {
         //checks if both player move and both players connected
         if (this.props.state.gamePlayable && this.props.state.playerTurn) {
