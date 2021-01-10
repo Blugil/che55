@@ -5,7 +5,12 @@ import Game from './components/game.js';
 import Home from './components/home.js';
 
 // Connect to server CHANGE TO LOCALHOST FOR FUTURE
-const socket = io.connect('https://che55.herokuapp.com/');
+const socket = io.connect('https://che55.herokuapp.com/', {
+    withCredentials: true,
+    extraHeaders: {
+      "my-custom-header": "abcd"
+    }
+  });
 
 export default class App extends React.Component {
 
