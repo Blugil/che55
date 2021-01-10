@@ -85,13 +85,18 @@ export default class Game extends React.Component {
 
     render () {
         return (
-            <div className="flex-center">
-                <h1>game.js</h1>
+            <div className="flex-center" style={{ backgroundColor: '#FFFAF0', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+                <div style={{ color: '#008B8B', textAlign: 'center', fontSize: '150%'}}>
+                    <h1>GAME</h1>
+                </div>
                 <h3>Game code: {this.props.state.gameCode}</h3>
                 <button onClick={this.props.quitGame}>
                     <p>Quit game</p>
                 </button>
-                <div>{this.props.state.winner}</div>
+                <br></br>
+                <div style={{ color: '#20B2AA' }}>{this.props.state.winner}</div>
+                <br></br>
+
                 <Chessboard
                     orientation={this.props.state.playerNo == 2 ? 'black' : 'white'}
                     position={this.state.fen}

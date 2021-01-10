@@ -113,7 +113,7 @@ export default class App extends React.Component {
 
     render () {
         return (
-            <div>
+            <div style={{ backgroundColor: '#FFFAF0', fontFamily: 'Arial, Helvetica, sans-serif' }}>
                 <header>
                     <h1>che55</h1>
                 </header>
