@@ -1,8 +1,8 @@
 // Absolute BARE minimum for a socket.io server
+// const generateID = require('./utils');
 // npm install express, socket.io, nodemon(optional)
 const app = require('express')();
 const http = require('http').createServer(app);
-const generateID = require('./utils');
 //manage cors requests (NECESSARY since we'll be hosting front and backend separate)
 const io = require("socket.io")(http, {
 cors: {
@@ -16,23 +16,36 @@ const state = {};
 const clientRooms = {};
 
 
+function generateID(length) {
+
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result+=characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
 
 // event 'connection' creates a socket
 io.on('connection', (socket) => {
     console.log("User connected");
+    
     // this is where we can add custom emiters and events (and the data they will send and recieve)
     socket.on('message', ({name, message}) => {
         io.emit('message', {name, message});
     });
 
     socket.on('newGame', handleNewGame);
-    socket.on('joinGame', handleJoin)
+    socket.on('joinGame', handleJoin);
+    socket.on('playerMove', hanldleMove);
 
     function handleNewGame() {
         
         //generates new room and joins it
         let room = generateID(5);
-        clientRoom[socket.id] = room;
+        clientRooms[socket.id] = room;
+        console.log(clientRooms);
         //lets the frontend see the unique gamecode
         socket.emit('gamecode', room);
 
@@ -43,22 +56,19 @@ io.on('connection', (socket) => {
     }
 
     function handleJoin(roomCode) {
-
         //looks for the room with the specified roomCode
-        const room = io.sockets.adapter.rooms[roomCode];
-
+        const room = Object.fromEntries(io.sockets.adapter.rooms);
         //ges all the sockes in he room
-        let users;
-        if (room) {
-            users = room.sockets;
-        }
-        console.log(users);
+        // let users;
+        // if (room) {
+        //     users = room.sockets;
+        //     console.log(users);
+        // }
         //sets the total number of clients
         let clients = 0;
-        if (users) {
-            clients = Object.keys(users).length;
+        if (room) {
+            clients = room[roomCode].size;
         }
-        console.log(cliens);
 
         //if there are no clients the room code is invalid
         if (clients === 0) {
@@ -79,6 +89,17 @@ io.on('connection', (socket) => {
         socket.join(roomCode);
         socket.number = 2;
         socket.emit('players', 2);
+        console.log('success');
+    }
+
+    function hanldleMove(move) {
+        const room = clientRooms[socket.id];
+
+        if (!room) {
+            return;
+        }
+        console.log(room, move);
+        io.sockets.in(room).emit('message', 'ping pong ding dong');
     }
 })
 
