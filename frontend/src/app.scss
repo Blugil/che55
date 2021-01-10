@@ -18,7 +18,6 @@ Chessboard {
   width: 100%;
 }
 
-// Logo
 img {
   width: 100%;
   image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
@@ -36,19 +35,22 @@ img {
   margin-bottom: 5%;
   width: 30%;
 }
-#game.logo {
-  width: 10%;
-}
 
 // Game page
+.flex-center {
+  margin-top: 3%;
+}
 .playArea {
   display: block;
-  margin-left: 25%;
-  margin-right: 5%;
+  margin-left: 2%;
   float: left;
 }
 .controls {
   background-color: #eee5d0;
-  float: left;
+  margin-left: 15%;
   padding: 20px;
+  float: left;
+}
+#game.logo {
+  width: 90%;
 }

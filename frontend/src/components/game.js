@@ -29,8 +29,6 @@ export default class Game extends React.Component {
 
     // Receive a move from the server
     makeMove = (receivedMove) => {
-
-
         let move = this.state.game.move(receivedMove);
 
         //double checks for valid move (even though its already checked)
@@ -46,15 +44,19 @@ export default class Game extends React.Component {
     // React to a player move
     onDrop = ({ sourceSquare, targetSquare}) => {
         //checks if both player move and both players connected
+
+        console.log("MOVE DETECTED");
         if (this.props.state.gamePlayable && this.props.state.playerTurn) {
             let move = this.state.game.move({
                 from: sourceSquare,
                 to: targetSquare,
                 promotion: "q"
             });
+            console.log("MOVE ALLOWED");
 
             // Illegal move
             if (move === null) return;
+            console.log("MOVE IS NULL");
 
             // Update game state
             this.setState(({ history, pieceSquare }) => ({
@@ -79,25 +81,24 @@ export default class Game extends React.Component {
     render () {
         return (
             <div className="flex-center">
-                <div className="logo" id="game">
-                    <img src={logo} alt="che55" />
+                <div className="controls">
+                    <div className="logo" id="game">
+                        <img src={logo} alt="che55" />
+                    </div>
+                    <h3>Game code: {this.props.state.gameCode}</h3>
+                    <button onClick={this.props.quitGame}>
+                        <p>Quit game</p>
+                    </button>
+                    <br></br>
+                    <div style={{ color: '#20B2AA' }}>{this.props.state.winner}</div>
+                    <br></br>
                 </div>
-
                 <div className="playArea">
                     <Chessboard
                         orientation={this.props.state.playerNo.toString() === "2" ? 'black' : 'white'}
                         position={this.state.fen}
                         onDrop={this.onDrop}
                     />
-                </div>
-                <div className="controls">
-                    <h3>Game code: {this.props.state.gameCode}</h3>
-                    <button onClick={this.props.quitGame}>
-                        <p>Quit game</p>
-                    </button>
-                    <br></br>
-                        <div style={{ color: '#20B2AA' }}>{this.props.state.winner}</div>
-                    <br></br>
                 </div>
             </div>
         );
