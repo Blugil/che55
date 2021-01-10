@@ -32,10 +32,7 @@ io.on('connection', (socket) => {
     console.log("User connected");
     
     // this is where we can add custom emiters and events (and the data they will send and recieve)
-    socket.on('message', ({name, message}) => {
-        io.emit('message', {name, message});
-    });
-
+    
     socket.on('newGame', handleNewGame);
     socket.on('joinGame', handleJoin);
     socket.on('playerMove', hanldleMove);
@@ -99,7 +96,7 @@ io.on('connection', (socket) => {
             return;
         }
         console.log(room, move);
-        io.sockets.in(room).emit('message', 'ping pong ding dong');
+        io.sockets.in(room).emit('playerMove', 'ping pong ding dong');
     }
 })
 
