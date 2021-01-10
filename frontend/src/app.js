@@ -1,11 +1,16 @@
 import React from 'react';
 import io from 'socket.io-client';
+import './app.scss';
 import Game from './components/game.js';
 import Home from './components/home.js';
-import './app.scss';
 
-// Connect to server
-const socket = io.connect('http://localhost:4000/');
+// Connect to server CHANGE TO LOCALHOST FOR FUTURE
+const socket = io.connect('https://che55.herokuapp.com/', {
+    withCredentials: true,
+    extraHeaders: {
+      "Access-Control-Allow-Origin" : "*"
+    }
+  });
 
 export default class App extends React.Component {
 

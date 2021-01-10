@@ -5,7 +5,7 @@ const http = require('http').createServer(app);
 const io = require("socket.io")(http, {
     cors: {
         //origin of request
-        origin: "http://localhost:3000",
+        origin: ["https://che55.online/", "nostalgic-keller-1abde6.netlify.app", "http://localhost:3000"],
         methods: ["GET", "POST"]
     }
 });
@@ -133,8 +133,8 @@ io.on('connection', (socket) => {
     }
 })
 
-
+let port = process.env.PORT || 4000;
 //listening on the server
-http.listen(4000, () => {
-    console.log("Running on port 4000");
+http.listen(port, () => {
+    console.log(`Running on port ${port}`);
 })
