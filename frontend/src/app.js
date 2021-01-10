@@ -4,8 +4,8 @@ import './app.scss';
 import Game from './components/game.js';
 import Home from './components/home.js';
 
-// Connect to server
-const socket = io.connect('http://localhost:4000/' || 'https://che55.herokuapp.com/');
+// Connect to server CHANGE TO LOCALHOST FOR FUTURE
+const socket = io.connect('https://che55.herokuapp.com/');
 
 export default class App extends React.Component {
 
