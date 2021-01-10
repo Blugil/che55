@@ -1,10 +1,11 @@
 import React from 'react';
 import Home from './components/home.js';
 import Game from './components/game.js';
-import socket from 'socket.io';
-import Login from './components/login.js';
-import Logout from './components/logout.js';
 const utils = require('./utils.js');
+
+// Connect to server
+import io from 'socket.io-client';
+const socket = io.connect('http://localhost:4000/');
 
 export default class App extends React.Component {
 
@@ -16,6 +17,14 @@ export default class App extends React.Component {
             playerNo: 0
         };
 
+        // Set up listeners
+        socket.on("gamecode", (code) => {
+            this.setState({gameCode: code })
+        });
+        socket.on("playerMove", (move) => {
+
+        });
+
         this.newGame = this.newGame.bind(this);
         this.joinGame = this.joinGame.bind(this);
         this.quitGame = this.quitGame.bind(this);
@@ -24,17 +33,21 @@ export default class App extends React.Component {
     // Start a new game and generate a room code.
     newGame() {
         socket.emit('newGame');
+        socket.emit('players', 1);
         this.setState({
-            isPlayingGame: true
+            isPlayingGame: true,
+            playerNo: 1
         })
     }
 
     // Join an existing game.
     joinGame(code) {
         socket.emit('joinGame', code);
+        socket.emit('players', 2);
         this.setState({
             isPlayingGame: true,
-            gameCode: code
+            gameCode: code,
+            playerNo: 2
         })
     }
 
@@ -49,7 +62,7 @@ export default class App extends React.Component {
     // Get either the homepage or gamepage, depending on state
     getCurrentPage() {
         if (this.state.isPlayingGame) {
-            return <Game quitGame={this.quitGame} />;
+            return <Game quitGame={this.quitGame} socket={socket} />;
         } else {
             return <Home onNewGame={this.newGame} onJoinGame={this.joinGame} />;
         }

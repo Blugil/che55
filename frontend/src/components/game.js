@@ -20,6 +20,17 @@ export default class Game extends React.Component {
         this.onDrop = this.onDrop.bind(this);
     }
 
+    // Receive a move from the server
+    makeMove = (receivedMove) => {
+        this.state.game.move(receivedMove);
+
+        // Update game state
+        this.setState(({ history, pieceSquare }) => ({
+            fen: this.state.game.fen(),
+            history: this.state.game.history({ verbose: true })
+        }));
+    }
+
     // React to a player move
     onDrop = ({ sourceSquare, targetSquare}) => {
         let move = this.state.game.move({
@@ -36,6 +47,9 @@ export default class Game extends React.Component {
             fen: this.state.game.fen(),
             history: this.state.game.history({ verbose: true })
         }));
+
+        // Use socket to send move
+        this.props.socket.emit("playerMove", this.state.fen);
     }
 
     render () {
