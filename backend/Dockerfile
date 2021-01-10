@@ -1,8 +1,7 @@
-FROM node
+FROM node:latest
 
 WORKDIR /usr/src/app/backend
-COPY package*.json ./
-RUN npm install
 COPY . .
+RUN npm install --production
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
