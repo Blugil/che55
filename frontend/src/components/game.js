@@ -41,18 +41,9 @@ export default class Game extends React.Component {
             fen: this.state.game.fen(),
             history: this.state.game.history({ verbose: true })
         }));
-        //checks after move if game is over
-        if (this.state.game.game_over()) {
-
-            let game_over_string = "Player " + this.props.state.playerNo + " wins!!"
-            this.setState({
-                gameOver: game_over_string
-            })
-        }
     }
 
     // React to a player move
-    // TODO: Prevent player from moving off-turn
     onDrop = ({ sourceSquare, targetSquare}) => {
         //checks if both player move and both players connected
         if (this.props.state.gamePlayable && this.props.state.playerTurn) {
@@ -94,7 +85,7 @@ export default class Game extends React.Component {
 
                 <div className="playArea">
                     <Chessboard
-                        orientation={this.props.state.playerNo == 2 ? 'black' : 'white'}
+                        orientation={this.props.state.playerNo.toString() === "2" ? 'black' : 'white'}
                         position={this.state.fen}
                         onDrop={this.onDrop}
                     />
